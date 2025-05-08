@@ -6,3 +6,7 @@ layer(base);
   --font-serif: "PT Serif", serif;
   --font-mono: "PT Mono", monospace;
 }
+
+html {
+  font-size: 12pt;
+}
