@@ -3,12 +3,12 @@ layer(base);
 @import 'tailwindcss';
 
 @theme {
-  --font-serif: "PT Serif", serif;
-  --font-mono: "PT Mono", monospace;
+  --font-serif: "IBM Plex Serif", "PT Serif", serif;
+  --font-mono: "IBM Plex Mono", "PT Mono", monospace;
   --color-paper: #FFFCF0;
   --color-flexoki-black: #100F0F;
 }
 
 html {
-  font-size: 14pt;
+  font-size: 12pt;
 }
