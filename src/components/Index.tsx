@@ -1,25 +1,35 @@
 import { Root, RootContent } from "mdast";
-import { ReactElement, ReactNode } from "react";
+import { ReactNode } from "react";
 
-function RenderContent({ content }: { content: RootContent }): ReactNode {
+interface Context {
+  insideList?: boolean;
+}
+
+function RenderContent({
+  content,
+  ctx,
+}: {
+  content: RootContent;
+  ctx?: Context;
+}): ReactNode {
   if (content.type === "heading") {
     if (content.depth === 1) {
       return (
-        <h1 className="mt-4 text-3xl">
+        <h1 className="my-4 text-3xl">
           <RenderContents contents={content.children} />
         </h1>
       );
     }
     if (content.depth === 2) {
       return (
-        <h2 className="mt-4 text-2xl">
+        <h2 className="my-2 text-2xl">
           <RenderContents contents={content.children} />
         </h2>
       );
     }
     if (content.depth >= 3) {
       return (
-        <h3 className="mt-4 text-xl">
+        <h3 className="my-2 text-xl">
           <RenderContents contents={content.children} />
         </h3>
       );
@@ -29,8 +39,15 @@ function RenderContent({ content }: { content: RootContent }): ReactNode {
     return <>{content.value}</>;
   }
   if (content.type === "paragraph") {
+    if (ctx?.insideList) {
+      return (
+        <>
+          <RenderContents contents={content.children} />
+        </>
+      );
+    }
     return (
-      <p className="mt-2">
+      <p className="my-1">
         <RenderContents contents={content.children} />
       </p>
     );
@@ -38,14 +55,20 @@ function RenderContent({ content }: { content: RootContent }): ReactNode {
   if (content.type === "list") {
     if (content.ordered) {
       return (
-        <ol className="list-decimal">
-          <RenderContents contents={content.children} />
+        <ol className="list-decimal list-inside">
+          <RenderContents
+            contents={content.children}
+            ctx={{ insideList: true }}
+          />
         </ol>
       );
     } else {
       return (
-        <ul className="list-disc">
-          <RenderContents contents={content.children} />
+        <ul className="list-disc list-inside">
+          <RenderContents
+            contents={content.children}
+            ctx={{ insideList: true }}
+          />
         </ul>
       );
     }
@@ -53,7 +76,10 @@ function RenderContent({ content }: { content: RootContent }): ReactNode {
   if (content.type === "listItem") {
     return (
       <li>
-        <RenderContents contents={content.children} />
+        <RenderContents
+          contents={content.children}
+          ctx={{ insideList: true }}
+        />
       </li>
     );
   }
@@ -67,11 +93,17 @@ function RenderContent({ content }: { content: RootContent }): ReactNode {
   throw new Error(`unknown element type: ${content.type}`);
 }
 
-function RenderContents({ contents }: { contents: RootContent[] }): ReactNode {
+function RenderContents({
+  contents,
+  ctx,
+}: {
+  contents: RootContent[];
+  ctx?: Context;
+}): ReactNode {
   return (
     <>
       {contents.map((x, i) => (
-        <RenderContent content={x} key={i} />
+        <RenderContent content={x} ctx={ctx} key={i} />
       ))}
     </>
   );
