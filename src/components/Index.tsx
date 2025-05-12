@@ -1,5 +1,6 @@
 import { Root, RootContent } from "mdast";
 import { ReactNode } from "react";
+import "../styles.css";
 
 interface Context {
   insideList?: boolean;
@@ -16,21 +17,21 @@ function RenderContent({
   if (content.type === "heading") {
     if (content.depth === 1) {
       return (
-        <h1 className="my-4 text-3xl">
+        <h1 className="text-3xl">
           <RenderContents contents={content.children} />
         </h1>
       );
     }
     if (content.depth === 2) {
       return (
-        <h2 className="my-2 text-2xl">
+        <h2 className="font-bold my-2">
           <RenderContents contents={content.children} />
         </h2>
       );
     }
     if (content.depth >= 3) {
       return (
-        <h3 className="my-2 text-xl">
+        <h3 className="font-bold my-2">
           <RenderContents contents={content.children} />
         </h3>
       );
@@ -48,7 +49,7 @@ function RenderContent({
       );
     }
     return (
-      <p className="my-1">
+      <p className="mb-4">
         <RenderContents contents={content.children} />
       </p>
     );
@@ -117,7 +118,7 @@ export default (ast: Root) => () => {
         <title>Dino Blog!!!</title>
       </head>
       <body className="font-serif bg-paper text-flexoki-black">
-        <article className="w-[70ch] mx-auto wrap-break-word text-left leading-5">
+        <article className="w-[60ch] mx-auto wrap-break-word text-left leading-6">
           <RenderContents contents={ast.children} />
         </article>
       </body>
