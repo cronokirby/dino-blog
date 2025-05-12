@@ -10,7 +10,8 @@ function RenderContent({
   ctx,
 }: {
   content: RootContent;
-  ctx?: Context;
+  ctx?: Context | undefined;
+  key?: number | undefined;
 }): ReactNode {
   if (content.type === "heading") {
     if (content.depth === 1) {
@@ -64,7 +65,7 @@ function RenderContent({
       );
     } else {
       return (
-        <ul className="list-disc list-inside">
+        <ul className="list-[square] list-inside">
           <RenderContents
             contents={content.children}
             ctx={{ insideList: true }}

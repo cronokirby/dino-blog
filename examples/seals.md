@@ -8,8 +8,8 @@ In this blog post, we explore the complete lifecycle of these remarkable creatur
 
 Seals are divided into two major families:
 
-- **Phocidae (True Seals):** These seals lack external ear flaps and have more streamlined bodies, making them efficient swimmers.
-- **Otariidae (Eared Seals, including Sea Lions and Fur Seals):** These possess visible external ears and can “walk” on land using their flippers.
+1. **Phocidae (True Seals):** These seals lack external ear flaps and have more streamlined bodies, making them efficient swimmers.
+2. **Otariidae (Eared Seals, including Sea Lions and Fur Seals):** These possess visible external ears and can “walk” on land using their flippers.
 
 Despite these differences, both groups share similar life history traits including long lifespans, delayed maturity, and complex social behaviors.
 
