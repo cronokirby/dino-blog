@@ -83,7 +83,7 @@ export default (ast: Root) => () => {
       <head>
         <title>Dino Blog!!!</title>
       </head>
-      <body className="font-serif">
+      <body className="font-serif bg-paper text-flexoki-black">
         <article className="w-[70ch] mx-auto wrap-break-word text-left leading-5">
           <RenderContents contents={ast.children} />
         </article>
