@@ -84,7 +84,6 @@ impl Code {
             _ => return None,
         };
         let filtered: String = chars.filter(|x| *x != '_').collect();
-        println!("{}", filtered);
         let serial = u16::from_str_radix(&filtered, 16).ok()?;
         Some(Code { taxon, serial })
     }
@@ -123,11 +122,9 @@ impl Creation {
             let Some(stem) = stem.to_str() else {
                 continue;
             };
-            println!("{}", stem);
             let Some(code) = Code::from_str(stem) else {
                 continue;
             };
-            println!("{:?}", code.taxon);
             if code.taxon != self.taxon {
                 continue;
             }
