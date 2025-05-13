@@ -43,7 +43,7 @@ fn prompt(p: &str) -> anyhow::Result<String> {
     Ok(stdin.lock().lines().next().unwrap()?)
 }
 
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Taxon {
     Post,
     Note,
@@ -77,21 +77,23 @@ struct Code {
 
 impl Code {
     pub fn from_str(s: &str) -> Option<Self> {
-        if s.len() != 1 + 1 + 4 {
-            return None;
-        }
         let mut chars = s.chars();
         let taxon = Taxon::from_char(chars.next()?)?;
         match chars.next() {
             Some('-') => {}
             _ => return None,
         };
-        let serial = u16::from_str_radix(s.split_at(2).1, 16).ok()?;
+        let filtered: String = chars.filter(|x| *x != '_').collect();
+        println!("{}", filtered);
+        let serial = u16::from_str_radix(&filtered, 16).ok()?;
         Some(Code { taxon, serial })
     }
 
     pub fn to_str(self) -> String {
-        format!("{}-{:04X}", self.taxon.to_char(), self.serial)
+        let base = format!("{:06X}", self.serial);
+        let (part0, part1) = base.split_at(3);
+
+        format!("{}-{}_{}", self.taxon.to_char(), part0, part1)
     }
 }
 
@@ -111,10 +113,8 @@ impl Creation {
 
     pub fn effect(self) -> anyhow::Result<()> {
         let now = Local::now();
-        let dir = format!("{}", now.year());
-        fs::create_dir_all(&dir)?;
         let mut highest_serial: Option<u16> = None;
-        let paths = fs::read_dir(&dir)?;
+        let paths = fs::read_dir(".")?;
         for path in paths {
             let path = path?.path();
             let Some(stem) = path.file_stem() else {
@@ -123,9 +123,14 @@ impl Creation {
             let Some(stem) = stem.to_str() else {
                 continue;
             };
+            println!("{}", stem);
             let Some(code) = Code::from_str(stem) else {
                 continue;
             };
+            println!("{:?}", code.taxon);
+            if code.taxon != self.taxon {
+                continue;
+            }
             highest_serial = Some(highest_serial.map_or(code.serial, |x| x.max(code.serial)));
         }
         let serial = match highest_serial {
@@ -143,7 +148,7 @@ impl Creation {
         contents.push_str(&format!("title: \"{}\"\n", self.title));
         contents.push_str(&format!("created: \"{}\"\n", now.format("%Y-%m-%d")));
         contents.push_str("---\n");
-        fs::write(format!("{}/{}.md", now.year(), code.to_str()), contents)?;
+        fs::write(format!("{}.md", code.to_str()), contents)?;
         Ok(())
     }
 }
