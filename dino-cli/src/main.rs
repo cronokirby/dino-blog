@@ -29,6 +29,10 @@ pub enum Add {
         #[arg(long)]
         title: Option<String>,
     },
+    Actor {
+        #[arg(long)]
+        name: Option<String>,
+    },
     Ref {
         #[arg(long)]
         title: Option<String>,
@@ -48,6 +52,7 @@ enum Taxon {
     Post,
     Note,
     Ref,
+    Actor,
 }
 
 impl Taxon {
@@ -56,6 +61,7 @@ impl Taxon {
             'P' => Some(Self::Post),
             'N' => Some(Self::Note),
             'R' => Some(Self::Ref),
+            'A' => Some(Self::Actor),
             _ => None,
         }
     }
@@ -65,6 +71,7 @@ impl Taxon {
             Taxon::Post => 'P',
             Taxon::Note => 'N',
             Taxon::Ref => 'R',
+            Taxon::Actor => 'A',
         }
     }
 }
@@ -157,6 +164,7 @@ fn main() -> anyhow::Result<()> {
             Add::Post { title } => (Taxon::Post, title),
             Add::Note { title } => (Taxon::Note, title),
             Add::Ref { title, date: _ } => (Taxon::Ref, title),
+            Add::Actor { name } => (Taxon::Actor, name),
         },
     };
     let creation = Creation::create_interactive(taxon, title)?;
