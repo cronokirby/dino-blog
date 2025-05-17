@@ -74,6 +74,15 @@ impl Taxon {
             Taxon::Actor => 'A',
         }
     }
+
+    pub fn to_str(&self) -> &'static str {
+        match self {
+            Taxon::Post => "post",
+            Taxon::Note => "note",
+            Taxon::Ref => "ref",
+            Taxon::Actor => "actor",
+        }
+    }
 }
 
 #[derive(Clone, Copy)]
@@ -150,6 +159,7 @@ impl Creation {
         let mut contents = String::new();
         contents.push_str("---\n");
         contents.push_str(&format!("title: \"{}\"\n", self.title));
+        contents.push_str(&format!("taxon: \"{}\"\n", self.taxon.to_str()));
         contents.push_str(&format!("created: \"{}\"\n", now.format("%Y-%m-%d")));
         contents.push_str("---\n");
         fs::write(format!("{}.md", code.to_str()), contents)?;
